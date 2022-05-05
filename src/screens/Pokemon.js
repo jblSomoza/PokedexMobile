@@ -6,14 +6,17 @@ import { getPokemonDetailsApi } from '../api/pokemon';
 import Header from '../components/Pokemon/Header';
 import Type from '../components/Pokemon/Type';
 import Stats from '../components/Pokemon/Stats';
+import Favorite from '../components/Pokemon/Favorite';
+import useAuth from '../hooks/useAuth';
 
 const Pokemon = (props) => {
   const { navigation, route:{ params } } = props;
+  const { auth } = useAuth();
   const [pokemon, setPokemon] = useState(null);
 
   useEffect(() =>{
     navigation.setOptions({
-      headerRight: () => null,
+      headerRight: () => auth ? <Favorite id={pokemon?.id}/> : undefined,
       headerLeft: () => <Icon 
                           name='arrow-left'
                           color="#fff"
@@ -21,7 +24,7 @@ const Pokemon = (props) => {
                           style={{ marginLeft:5 }} onPress={() => navigation.goBack()}
                         />
     })
-  }, [navigation, params])
+  }, [navigation, params, pokemon])
 
   useEffect(() => {
     (async () =>{
